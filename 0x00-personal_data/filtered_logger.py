@@ -67,7 +67,7 @@ def get_logger() -> logging.Logger:
     return logger
 
 
-PII_FIELDS = ["name", "email", "password", "ssn", "phone"]
+PII_FIELDS = ("name", "email", "password", "ssn", "phone")
 
 
 def get_db() -> connection.MySQLConnection:
