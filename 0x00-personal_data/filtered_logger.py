@@ -22,9 +22,8 @@ def filter_datum(fields: List[str], redaction: str, message: str,
         message: the log line
         separartor: the character used to separate
     """
-    for field in fields:
-        pattern = rf"({'|'.join(field)})(?={separator}|$)"
-    return re.sub(pattern, f"\\1={redaction}", message)
+    pattern = rf"({'|'.join(fields)})=.+?{separator}"
+    return re.sub(pattern, f"\\1={redaction}{separator}", message)
 
 
 class RedactingFormatter(logging.Formatter):
