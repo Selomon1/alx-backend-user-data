@@ -5,8 +5,7 @@ Filtered_logger module contains functions to handle personal data
 import logging
 import csv
 import os
-from mysql.connector import connect, MySQLConnection
-
+import mysql.connector
 from logging import StreamHandler
 import re
 from typing import List
@@ -70,19 +69,19 @@ def get_logger() -> logging.Logger:
 PII_FIELDS = ("name", "email", "password", "ssn", "phone")
 
 
-def get_db() -> MySQLConnection:
+def get_db() -> mysql.connector.connection.MySQLConnection:
     """
     Connect to MySQL database
     Retrives database credentials from environmental variables
     Returns:
         MySQLConnection: A connection object to the MySQL database.
     """
-    username = os.getenv('PERSONAL_DATA_DB_USERNAME', 'root')
-    password = os.getenv('PERSONAL_DATA_DB_PASSWORD', '')
-    host = os.getenv('PERSONAL_DATA_DB_HOST', 'localhost')
-    database = os.getenv('PERSONAL_DATA_DB_NAME')
+    username = os.environ.get('PERSONAL_DATA_DB_USERNAME', 'root')
+    password = os.environ.get('PERSONAL_DATA_DB_PASSWORD', '')
+    host = os.environ.get('PERSONAL_DATA_DB_HOST', 'localhost')
+    database = os.environ.get('PERSONAL_DATA_DB_NAME')
 
-    db_connection = connect(
+    db_connection = mysql.connector.connect(
         user=username,
         password=password,
         host=host,
