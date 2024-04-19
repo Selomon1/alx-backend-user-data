@@ -9,7 +9,7 @@ from api.v1.views import app_views
 def status() -> str:
     """ GET /api/v1/status
     Return:
-      - the status of the API
+        - the status of the API
     """
     return jsonify({"status": "OK"})
 

@@ -19,7 +19,7 @@ auth = None
 if getenv('AUTH_TYPE') == 'basic_auth':
     from api.v1.auth.basic_auth import BasicAuth
     auth = BasicAuth()
-else:
+elif getenv('AUTH_TYPE') == 'auth':
     from api.v1.auth.auth import Auth
     auth = Auth()
 
@@ -57,6 +57,9 @@ def forbidden(error) -> str:
 
 @app.before_request
 def before_request():
+    """
+    handler before requesting
+    """
     excluded_paths = ['/api/v1/status/',
                       'api/v1/unauthorized/', '/api/v1/forbidden/']
     if auth is None or request.path in excluded_paths:
