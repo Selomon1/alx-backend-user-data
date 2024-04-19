@@ -5,6 +5,7 @@ Authentication module
 
 from flask import request
 from typing import List, TypeVar
+from re import search, sub
 
 
 class Auth:
