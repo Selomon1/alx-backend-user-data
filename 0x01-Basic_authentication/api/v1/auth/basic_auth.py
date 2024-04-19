@@ -1,6 +1,13 @@
 #!/usr/bin/env python3
+"""
+Basic Authentication Module
+"""
 
 from api.v1.auth.auth import Auth
+from typing import TypeVar, List
+from models.user import User
+import base64
+import binascii
 
 
 class BasicAuth(Auth):
@@ -28,7 +35,7 @@ class BasicAuth(Auth):
         try:
             decoded_header = base64.b64decode(base64_authorization_header)
             return decoded_header.decode('utf-8')
-        except binascii.Error:
+        except (UnicodeDecodeError, binascii.Error):
             return None
 
     def extract_user_credentials(
@@ -41,7 +48,8 @@ class BasicAuth(Auth):
                 not isinstance(decoded_base64_authorization_header, str) or
                 ':' not in decoded_base64_authorization_header):
             return None, None
-        return decoded_base64_authorization_header.split(':', 1)
+        email, password = decoded_base64_authorization_header.split(':', 1)
+        return email, password
 
     def user_object_from_credentials(self,
                                      user_email: str,
@@ -56,11 +64,11 @@ class BasicAuth(Auth):
         if not users:
             return None
         user = users[0]
-        if not user.is_valid-password(user_pwd):
-            return none
+        if not user.is_valid_password(user_pwd):
+            return None
         return user
 
-    def current_user(self, request=None) -> Typevar('User'):
+    def current_user(self, request=None) -> TypeVar('User'):
         """ overloads Auth's current_user method """
         if request is None:
             return None
