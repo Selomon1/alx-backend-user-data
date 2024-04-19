@@ -40,7 +40,7 @@ def unauthorized(error) -> str:
     Returns:
         A JSON response with status code 401.
     """
-    return jsonify({"errpr": "Unauthorized"}), 401
+    return jsonify({"error": "Unauthorized"}), 401
 
 
 @app.errorhandler(403)
