@@ -3,7 +3,6 @@
 
 from api.v1.auth.session_exp_auth import SessionExpAuth
 from models.user_session import UserSession
-import uuid
 from datetime import datetime, timedelta
 
 
@@ -16,7 +15,6 @@ class SessionDBAuth(SessionExpAuth):
         if not session_id:
             return None
 
-        session_id = str(uuid.uuid4())
         user_session = UserSession(
             user_id=user_id,
             session_id=session_id
