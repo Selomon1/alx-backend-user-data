@@ -3,7 +3,7 @@
 Module of User Sessions
 """
 
-from models.base import Base
+from .base import Base
 
 
 class UserSession(Base):
