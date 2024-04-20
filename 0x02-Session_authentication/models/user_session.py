@@ -11,9 +11,10 @@ class UserSession(Base):
     """ Model for storing user sessions """
     __tablename__ = 'user_sessions'
 
-    user_id = Column(String(128), nullable=False)
-    session_id = Column(String(128), nullable=False)
+    user_id = Column(String, nullable=False)
+    session_id = Column(String, nullable=False)
 
-    def __init__(self, user_id=None, session_id=None):
-        self.user_id = user_id
-        self.session_id = session_id
+    def __init__(self, *args: list, **kwargs: dict):
+        super().__init__(*args, **kwargs)
+        self.user_id = kwargs.get("user_id")
+        self.session_id = kwargs.get("session_id")
