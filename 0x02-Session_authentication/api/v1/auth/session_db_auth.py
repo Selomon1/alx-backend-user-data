@@ -12,54 +12,35 @@ from os import getenv
 
 class SessionDBAuth(SessionExpAuth):
     """
-    Session authentication using database
+    Session database authentication class
     """
-
-    def __init__(self):
-        """ Initialize SessionDBAuth """
-        super().__init__()
-        self.database_url = getenv('DATABASE_URL', '')
-        self.engine = create_engine(self.database_url)
 
     def create_session(self, user_id=None):
         """ Create a session and store it in the database """
-        if user_id:
-            Session = sessionmaker(bind=self.engine)
-            session = Session()
+        session_id = super().create_session(user_id)
+        if session_id:
+            session_id = str(uuid.uuid4())
             new_session = UserSession(
                 user_id=user_id,
-                session_id=super().create_session(user_id)
+                session_id=session_id)
             )
-            session.add(new_session)
-            session.commit
-            session.close()
-            return new_session.session_id
+            new_session.save()
+            return session_id
         return None
 
     def user_id_for_session_id(self, session_id=None):
         """Retrieve user id from the database for a given session """
-        if session_id:
-            Session = sessionmaker(bind=self.engine)
-            session = Session()
-            user_session = session.query(UserSession)\
-                .filter_by(session_id=session_id).first()
-            if user_session:
-                user_id = super().user_id_for_session_id(session_id)
-                session.close()
-                return user_id
-            session.close()
+        if session_id is None:
+            return None
+        user_session = UserSession.get(session_id)
+        if user_session:
+            return user_session.user_id
         return None
 
     def destroy_session(self, request=None):
         """ Destroy the session stored in the database """
-        if request:
-            session_id = self.session-cookie(request)
-            if session_id:
-                Session = sessionmaker(bind=self.engine)
-                session = Session()
-                user_session = session.query(UserSession)\
-                    .filter_by(session_id=session_id).first()
-                if user_session:
-                    session.delete(user_session)
-                    session.commit()
-                session.close()
+        session_id = self.session_cookie(request)
+        if session_id:
+            user_session = UserSession.get(session_id)
+            if user_session:
+                user-session.delete()
