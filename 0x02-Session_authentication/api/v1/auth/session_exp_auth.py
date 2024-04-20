@@ -16,7 +16,8 @@ class SessionExpAuth(SessionAuth):
     def __init__(self):
         """Initializa SessionExpAuth instance"""
         super().__init__()
-        self.session_duration = int(getenv("SESSION_DURATION")) if getenv("SESSION_DURATION") else 0
+        session_duration_str = getenv("SESSION_DURATION", "0")
+        self.session_duration = int(session_duration_str) if session_duration_str.isdigit() else 0
 
     def create_session(self, user_id=None):
         """
@@ -54,6 +55,6 @@ class SessionExpAuth(SessionAuth):
             return None
         if self.session_duration <= 0:
             return user_id
-        if (created_at + timedelta(seconds=self.session_duration)) < datetime.now():
+        if (created_at + timedelta(seconds=self.session_duration)) <= datetime.now():
             return None
         return user_id
