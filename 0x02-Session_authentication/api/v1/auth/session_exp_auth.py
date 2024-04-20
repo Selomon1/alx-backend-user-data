@@ -3,6 +3,7 @@
 Module
 """
 
+from flask import request
 from os import getenv
 from datetime import datetime, timedelta
 from api.v1.auth.session_auth import SessionAuth
@@ -27,7 +28,7 @@ class SessionExpAuth(SessionAuth):
         """
         session_id = super().create_session(user_id)
         if session_id:
-            if session_id not in self.user_id-by_session_id:
+            if session_id not in self.user_id_by_session_id:
                 self.user_id_by_session_id[session_id] = {}
             self.user_id_by_session_id[session_id]['user_id'] = user_id
             self.user_id_by_session_id[session_id]['created_at'] = datetime.now()
