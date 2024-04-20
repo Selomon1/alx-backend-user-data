@@ -36,7 +36,7 @@ class SessionDBAuth(SessionExpAuth):
             user_session.created_at +
             timedelta(seconds=self.session_duration)
         )
-        if ((session_expiry - datetime.utcnow()).total_seconds() < 0:
+        if (session_expiry - datetime.utcnow()).total_seconds() < 0:
             user_session.remove()
             del self.user_id_by_session_id.get(session_id)
             return None
