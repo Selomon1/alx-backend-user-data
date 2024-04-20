@@ -3,7 +3,6 @@
 Module of User Sessions
 """
 
-from sqlalchemy import Column, String
 from models.base import Base
 
 
