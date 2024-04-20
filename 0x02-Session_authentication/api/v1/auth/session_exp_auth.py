@@ -29,10 +29,10 @@ class SessionExpAuth(SessionAuth):
         """
         session_id = super().create_session(user_id)
         if session_id:
-            if session_id not in self.user_id_by_session_id:
-                self.user_id_by_session_id[session_id] = {}
-            self.user_id_by_session_id[session_id]['user_id'] = user_id
-            self.user_id_by_session_id[session_id]['created_at'] = datetime.now()
+            self.user_id_by_session_id[session_id] = {
+                "user_id": user_id,
+                "created_at": datetime.now()
+            }
             return session_id
         return None
 
