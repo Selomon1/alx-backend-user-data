@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Module
+Module SessionDB Authentication
 """
 
 from api.v1.auth.session_exp_auth import SessionExpAuth
@@ -41,4 +41,5 @@ class SessionDBAuth(SessionExpAuth):
         if session_id:
             user_session = UserSession.get(session_id)
             if user_session:
-                user-session.delete()
+                user_session.delete()
+        return None
