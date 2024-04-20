@@ -32,7 +32,25 @@ def login():
     if not user.is_valid_password(password):
         return jsonify({"error": "wrong password"}), 401
 
-    session_id = auth.create_session(user.id)
+    from api.v1.app import auth
+    new_session_id = auth.create_session(user.id)
     response = jsonify(user.to_json())
-    response.set_cookie(getenv("SESSION_NAME"), session_id)
+    response.set_cookie(getenv("SESSION_NAME"), new_session_id)
     return response
+
+
+@app_views.route('/auth_session/logout', methods=['DELETE'],
+                 strict_slashes=False)
+def logout():
+    """
+    Logout the user (destroy the session)
+    Returns:
+        JSON: an empty JSON dictionary
+    Raises:
+        404: if the session canot be destroyed
+    """
+    from api.v1.app import auth
+    if not auth.destroy_session(request):
+        abort(404)
+
+    return jsonify({})
