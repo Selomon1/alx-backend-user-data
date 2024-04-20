@@ -6,7 +6,7 @@ Authentication module
 from flask import request
 from typing import List, TypeVar
 from re import search, sub
-import os
+from os import getenv
 
 
 class Auth:
@@ -56,8 +56,15 @@ class Auth:
         return None
 
     def session_cookie(self, request=None):
+        """
+        Retrieve the session ID from the request's cookies.
+        Args:
+            request: The request object contain cookies
+        Returns:
+            str: The session ID retrieved from the cookies, else None
+        """
         if request is None:
             return None
 
-        session_name = os.getenv("SESSION_NAME")
+        session_name = getenv("SESSION_NAME")
         return request.cookies.get(session_name)
