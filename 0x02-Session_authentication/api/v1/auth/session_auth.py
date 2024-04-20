@@ -78,5 +78,5 @@ class SessionAuth(Auth):
         if user_id is None:
             return False
 
-        del self.user_id_by_session_id[session_id]
+        del self.user_id_for_session_id[session_id]
         return True

@@ -50,7 +50,7 @@ def logout():
         404: if the session canot be destroyed
     """
     from api.v1.app import auth
-    if not auth.destroy_session(request):
+    if auth.destroy_session(request) is None:
         abort(404)
 
     return jsonify({}), 200
