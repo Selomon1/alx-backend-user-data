@@ -38,7 +38,7 @@ class SessionDBAuth(SessionExpAuth):
         )
         if session_expiry < datetime.utcnow():
             user_session.remove()
-            return none
+            return None
 
         return user_session.user_id
 
