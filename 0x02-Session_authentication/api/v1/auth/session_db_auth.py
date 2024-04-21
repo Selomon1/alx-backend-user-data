@@ -28,7 +28,7 @@ class SessionDBAuth(SessionExpAuth):
             return None
 
         user_sessions = UserSession.search({"session_id": session_id})
-        if not user_session:
+        if not user_sessions:
             return None
 
         user_session = user_sessions[0]
@@ -38,7 +38,7 @@ class SessionDBAuth(SessionExpAuth):
         )
         if (session_expiry - datetime.utcnow()).total_seconds() < 0:
             user_session.remove()
-            del self.user_id_by_session_id.get(session_id)
+            del self.user_id_by_session_id[session_id]
             return None
 
         return user_session.user_id
@@ -54,9 +54,9 @@ class SessionDBAuth(SessionExpAuth):
 
         user_id = self.user_id_for_session_id(session_id)
         if not user_id:
-            return false
+            return False
 
         user_session = UserSession.search({"session_id": session_id})[0]
-        user_sesssion.remove()
+        user_session.remove()
 
         return True
