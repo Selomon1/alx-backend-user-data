@@ -28,20 +28,9 @@ class SessionDBAuth(SessionExpAuth):
             return None
 
         user_sessions = UserSession.search({"session_id": session_id})
-        if not user_sessions:
-            return None
-
-        user_session = user_sessions[0]
-        session_expiry = (
-            user_session.created_at +
-            timedelta(seconds=self.session_duration)
-        )
-        if (session_expiry - datetime.utcnow()).total_seconds() < 0:
-            user_session.remove()
-            del self.user_id_by_session_id[session_id]
-            return None
-
-        return user_session.user_id
+        if user_sessions:
+            return user_id
+        return None
 
     def destroy_session(self, request=None):
         """Destroy the session stored in the database."""
