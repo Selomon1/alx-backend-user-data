@@ -18,7 +18,7 @@ def register_user(email: str, password: str) -> None:
     url = f"{BASE_URL}/users"
     data = {"email": email, "password": password}
     response = requests.post(url, data=data)
-    assert response.status_data == 200
+    assert response.status_code == 200
 
 
 def log_in_wrong_password(email: str, password: str) -> None:
@@ -47,7 +47,7 @@ def profile_logged(session_id: str) -> None:
     url = f"{BASE_URL}/profile"
     cookies = {"session_id": session_id}
     response = requests.get(url, cookies=cookies)
-    assert response.staus_code == 200
+    assert response.status_code == 200
     payload = response.json()
     email_from_payload = payload.get("email")
     user = AUTH.get_user_from_session_id(session_id)
