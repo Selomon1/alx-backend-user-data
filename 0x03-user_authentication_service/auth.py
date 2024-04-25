@@ -5,10 +5,10 @@ from db import DB
 from user import User
 from sqlalchemy.orm.exc import NoResultFound
 import uuid
-from typing import TypeVar
+from typing import TypeVar, Union
 
 
-def _hash_password(password: str) -> str:
+def _hash_password(password: str) -> bytes:
     """
     Generate a salted hash of the input password using bcrypt.
 
