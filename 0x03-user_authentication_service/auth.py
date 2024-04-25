@@ -8,7 +8,7 @@ import uuid
 from typing import TypeVar
 
 
-def _hash_password(password: str) -> bytes:
+def _hash_password(password: str) -> str:
     """
     Generate a salted hash of the input password using bcrypt.
 
