@@ -111,17 +111,13 @@ def update_password():
         AUTH.update_password(reset_token, new_password)
     except ValueError:
         abort(403)
-
-    user = AUTH.get_user_by_email(email)
-    if user:
-        response = {
-            "email": email,
-            "message": "Password updated"
-        }
-        return jsonify(response), 200
-    else:
-        abort(403)
-
+    
+    response = {
+        "email": email,
+        "message": "Password updated"
+    }
+    return jsonify(response), 200
+    
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port="5000")
