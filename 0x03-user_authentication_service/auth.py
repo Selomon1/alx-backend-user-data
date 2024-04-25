@@ -137,7 +137,7 @@ class Auth:
             user = self._db.find_user_by(reset_token=reset_token)
             hashed_password = _hash_password(new_password)
             user.hashed_password = hashed_password
-            user.rest_token = None
-            self._db.commit()
+            user.reset_token = None
+            self._db.update_user()
         except noResultFound:
             raise ValueError("Invalid reset token")
