@@ -93,7 +93,7 @@ def get_reset_password_token():
 
 
 @app.route("/reset_password", methods=["PUT"], strict_slashes=False)
-def update_password():
+def update_password() -> str:
     """
     Update user's password using reset token.
 
@@ -112,11 +112,10 @@ def update_password():
     except ValueError:
         abort(403)
     
-    response = {
+    return jsonify({
         "email": email,
         "message": "Password updated"
-    }
-    return jsonify(response), 200
+    }), 200
     
 
 if __name__ == "__main__":
