@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-"""
-Module
-"""
+"""Module provides route and handlesrs for the user authentication."""
 
 from flask import Flask, jsonify, request, make_response, abort, redirect
 from auth import Auth
@@ -31,6 +29,7 @@ def register_user():
 
 @app.route("/sessions", methods=["POST"], strict_slashes=False)
 def login():
+    """Handle POST requests to authenticate user login."""
     email = request.form.get('email')
     password = request.form.get('password')
 
@@ -51,6 +50,13 @@ def login():
 
 @app.route("/sessions", methods=["DELETE"], strict_slashes=False)
 def logout():
+    """
+    Log out the user by destroying the session.
+
+    Returns:
+        Union[str, Tuple[str, int]]: redirection to root URL or a 403 no user.
+
+    """
     session_id = request.cookies.get("session_id")
     user = AUTH.get_user_from_session_id(session_id)
     if user:
@@ -62,13 +68,50 @@ def logout():
 
 @app.route("/profile", methods=["GET"], strict_slashes=False)
 def profile():
+    """Handle GET requests to retrieve user profile."""
     session_id = request.cookies.get("session_id")
     user = AUTH.get_user_from_session_id(session_id)
     if user:
         return jsonify(email=user.email), 200
     else:
         abort(403)
-        
+
+
+@app.route("/reset_password", methods=["POST"], strict_slashes=False)
+def get_reset_password_token():
+    """Generate a reset password token for the user."""
+    email = request.form.get('email')
+
+    if not email:
+        abort(400)
+    try:
+        reset_token = AUTH.get_reset_password_token(email)
+    except ValueError:
+        abort(403, f"Email '{email}' is not registered")
+
+    return jsonify({"email": email, "reset_token": reset_token}), 200
+
+
+@app.route("/reset_password", methods=["PUT"], strict_slashes=False)
+def update_password():
+    """
+    Update user's password using reset token.
+
+    Request:
+        - Form data with fields 'email, reset-token and new password'.
+    Response:
+        - Token invalid, respond with 403 HTTP code.
+        - token valid, respond with 200 HTTP code.
+    """
+    email = request.form.get('email')
+    reset_token = request.form.get('reset_token')
+    new_password = request.form.get('new_password')
+
+    try:
+        AUTH.update_password(reset_token, new_password)
+        return jsonify({"email": email, "message": "Password updated"})
+    except ValueError:
+        abort(403)
 
 
 if __name__ == "__main__":
